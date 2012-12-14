@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.lee.View.FileListLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/root" 
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+    <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_width="fill_parent" 
+        android:background="@drawable/book_shadow"
+        android:layout_height="fill_parent">
+        <!-- title bar -->
+        <RelativeLayout android:gravity="center_vertical" 
+            android:orientation="horizontal" 
+            android:id="@id/titlebar" 
+            android:background="@drawable/bs_title_bkg" 
+            android:paddingLeft="8.0dip" 
+            android:paddingRight="8.0dip" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content">
+            <Button android:layout_gravity="right|center" 
+                android:id="@id/back" 
+                android:paddingBottom="2.0dip" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:text="@string/common_dlg_text_toolbar_exit" 
+                style="@style/Widget.Button.Nav.Back" />
+            <Button android:id="@id/menu" 
+                android:layout_alignParentRight="true"
+                android:paddingBottom="2.0dip" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:text="@string/common_dlg_text_toolbar_menu" 
+                style="@style/Widget.Button.Nav.Menu" />
+            <TextView android:textSize="16.0sp" 
+                android:textColor="#ff55595e" 
+                android:ellipsize="end" 
+                android:gravity="center" 
+                android:layout_toLeftOf="@id/menu"
+                android:layout_toRightOf="@id/back"
+                android:id="@id/title" 
+                android:layout_width="fill_parent" 
+                android:layout_height="wrap_content" 
+                android:lines="1" 
+                android:shadowColor="@android:color/white" 
+                android:shadowDx="1.0" 
+                android:shadowDy="1.0" 
+                android:shadowRadius="1.0"/>
+        </RelativeLayout>
+        <!-- file path show -->
+        <TextView 
+        	android:textSize="16.0sp" 
+            android:textColor="#ff55595e" 
+            android:ellipsize="end" 
+            android:gravity="center_vertical" 
+            android:id="@id/path" 
+            android:background="@drawable/nv_titlebar_tip_bkg"
+            android:layout_width="fill_parent" 
+            android:layout_height="30dip" 
+            android:lines="1"/>
+        <!-- file info list -->
+        <include layout="@layout/ctrl_book_list"/>
+    </LinearLayout>
+</com.android.lee.View.FileListLayout>

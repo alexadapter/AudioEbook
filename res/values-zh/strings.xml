@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">胖子读书</string>
+    <string name="common_dlg_text_toolbar_exit">返 回</string>
+    <string name="common_dlg_text_toolbar_menu">菜 单</string>
+    <string name="TBI_OpenFile">打开书籍</string>
+    <string name="TBI_BookShelf">我的书柜</string>
+    <string name="TBI_ImportFile">导入存储卡上的图书</string>
+</resources>

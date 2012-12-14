@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    android:layout_height="fill_parent">
+    <include layout="@layout/activity_base"/>
+    <com.android.lee.View.ReadingLayout
+        android:layout_width="fill_parent"
+        android:id="@id/reading"
+        android:visibility="gone"
+    	android:layout_height="fill_parent"/>
+</LinearLayout>

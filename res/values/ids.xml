@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="root">false</item>
+    <item type="id" name="panel">false</item>
+    <item type="id" name="title_bkg">false</item>
+    <item type="id" name="app">false</item>
+    <item type="id" name="titlebar">false</item>
+    <item type="id" name="back">false</item>
+    <item type="id" name="title">false</item>
+    <item type="id" name="path">false</item>
+    <item type="id" name="right_panel">false</item>
+    <item type="id" name="menu">false</item>
+    <item type="id" name="switcher">false</item>
+    <item type="id" name="shadow">false</item>
+    <item type="id" name="view_flipper">false</item>
+    <item type="id" name="book_shelf_page">false</item>
+    <item type="id" name="search_page">false</item>
+    <item type="id" name="download_page">false</item>
+    <item type="id" name="software_page">false</item>
+    <item type="id" name="toolbar">false</item>
+    <item type="id" name="flipper">false</item>
+    <item type="id" name="recommend_page">false</item>
+    <item type="id" name="rank_page">false</item>
+    <item type="id" name="bkg">false</item>
+    <item type="id" name="cover">false</item>
+    <item type="id" name="bookmark">false</item>
+    <item type="id" name="bl_container">false</item>
+    <item type="id" name="bl_list">false</item>
+    <item type="id" name="detail">false</item>
+    <item type="id" name="date">false</item>
+    
+    <item type="id" name="reading">false</item>
+    <item type="id" name="menu_itemLayout">false</item>
+    <item type="id" name="item_image">false</item>
+    <item type="id" name="item_text">false</item>
+    <item type="id" name="gridview">false</item>
+</resources>

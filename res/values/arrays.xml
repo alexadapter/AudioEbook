@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="FileTypeName">
+        <item >文件夹</item>
+        <item >文本</item>
+        <item >网页</item>
+        <item >图片</item>
+        <item >压缩文件</item>
+        <item >未知文件</item>
+    </string-array>
+    <!--
+     	<item >视频</item>
+        <item >音乐</item>
+        <item >应用</item> <string name="Folder">文件夹</string>
+    <string name="Txt">文本</string>
+    <string name="Html">网页</string>
+    <string name="Movie">视频</string>
+    <string name="Music">音乐</string>
+    <string name="Photo">图片</string>
+    <string name="Apk">应用</string>
+    <string name="Zip">压缩文件</string> -->
+</resources>

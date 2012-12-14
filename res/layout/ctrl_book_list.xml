@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.lee.View.FileListView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" 
+    android:id="@id/bl_container" 
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+    <ListView 
+        android:scrollbarStyle="outsideOverlay" 
+        android:id="@id/bl_list" 
+        android:animationCache="true" 
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" 
+        android:listSelector="@drawable/book_list_selector" 
+        android:scrollingCache="true" 
+        android:cacheColorHint="#00000000" 
+        android:divider="@drawable/bs_list_divider" 
+        android:dividerHeight="2.0px" 
+        android:layout_weight="1.0" 
+        android:fastScrollEnabled="true" />
+</com.android.lee.View.FileListView>

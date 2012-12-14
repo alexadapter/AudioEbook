@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <color name="red" >#ffff0000</color>
+    <color name="gray" >#ffD3DEE0</color>
+    <color name="translucent" >#10ffffff</color>
+    <color name="mainlistdiv" >#FFBFBFBF</color>
+    
+    <!-- <color name="lineleft">#ffB6C4C7</color>
+    <color name="lineright">#ffE9EEF1</color> -->
+    
+    <color name="lineleft">#10000000</color>
+    <color name="lineright">#10ffffff</color>
+    
+    <color name="divtop">#fff6fffc</color>
+    <color name="divbottom">#fff8f8ee</color>
+    
+    
+    <color name="test">#80f8f8ee</color>
+</resources>
