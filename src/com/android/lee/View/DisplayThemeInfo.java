@@ -15,6 +15,7 @@ public class DisplayThemeInfo implements IDisplayTheme{
 	private   	int				mViewWidth = 480;
 	private   	int				mViewHeight = 854;
 	private   	int  			mDisplayWidth = mViewWidth - mLeftPadding - mRightPadding;
+	//private		int				mDisplayHeight;
 		
 	private		int				mThemeid = 0;
 	private  	int				mRowCount = 0;

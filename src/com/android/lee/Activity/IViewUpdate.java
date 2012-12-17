@@ -1,13 +1,10 @@
 package com.android.lee.Activity;
 
-import android.R.integer;
-import android.database.Cursor;
-
-import com.android.lee.View.IViewInfo.PageDataInfo;
+import com.android.lee.View.IViewInfo.IPageDateInfo;
 
 public interface IViewUpdate {
 	//-=====FileManager
-	public void needUpdateData(PageDataInfo info,int offset,boolean isNext);
+	public void needUpdateData(IPageDateInfo info,int offset,boolean isNext);
 	public void updateDataSuccess();
 
 	

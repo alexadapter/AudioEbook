@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import android.graphics.Paint;
 
-import com.android.lee.View.IViewInfo.PageDataInfo;
+import com.android.lee.View.IViewInfo.IPageDateInfo;
 
 public interface IDataFactory {
 	public boolean 				openFile(String fileName) throws IOException, FileNotFoundException;
@@ -21,8 +21,8 @@ public interface IDataFactory {
 //	public boolean 				readFile(int offset,int rowCount,int pageCount) throws IOException;
 //	public void 				analyseData(PageDataInfo data,Paint paint,int rowCount);
 	
-	public boolean 				readPageData(int offset1,int rowCount,PageDataInfo analyseData,Paint paint)  throws IOException;
-	public boolean 				readLastPageData(int offset1,int rowCount,PageDataInfo analyseData,Paint paint)  throws IOException;
+	public boolean 				readPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException;
+	public boolean 				readLastPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException;
 	//忽略掉第一行，因为跳转的时候不知道这位置是否是中文还是英文，也不知道是什么编码》。。
 	public int 					ignoreOneLine(int offset);
 }

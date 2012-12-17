@@ -39,19 +39,7 @@
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 
             android:lines="2" />
-        <TextView 
-            android:textSize="11.0sp" 
-            android:textColor="#ff858585" 
-            android:ellipsize="end" 
-            android:id="@id/detail" 
-            android:layout_width="fill_parent" 
-            android:layout_height="wrap_content" 
-            android:layout_below="@id/title"
-            android:singleLine="true" 
-            android:shadowColor="@android:color/white" 
-            android:shadowDx="1.0" 
-            android:shadowDy="1.0" 
-            android:shadowRadius="1.0" />
+        
         <TextView 
             android:layout_alignParentRight="true"
             android:textSize="11.0sp" 
@@ -62,6 +50,20 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
             android:layout_marginRight="10dip"
+            android:singleLine="true" 
+            android:shadowColor="@android:color/white" 
+            android:shadowDx="1.0" 
+            android:shadowDy="1.0" 
+            android:shadowRadius="1.0" />
+        <TextView 
+            android:textSize="11.0sp" 
+            android:textColor="#ff858585" 
+            android:ellipsize="end" 
+            android:id="@id/detail" 
+            android:layout_toLeftOf="@id/date"
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
             android:singleLine="true" 
             android:shadowColor="@android:color/white" 
             android:shadowDx="1.0" 

@@ -10,7 +10,6 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -37,6 +36,7 @@ import com.android.lee.View.DisplayThemeInfo;
 import com.android.lee.View.FileListLayout;
 import com.android.lee.View.FileListView;
 import com.android.lee.View.IDisplayTheme;
+import com.android.lee.View.IViewInfo.IPageDateInfo;
 import com.android.lee.View.IViewInfo.PageDataInfo;
 import com.android.lee.View.ReadingLayout;
 import com.android.lee.utils.LogHelper;
@@ -193,10 +193,8 @@ public class MainUi extends Activity implements IViewUpdate{
 	        final View textEntryView = inflater.inflate(R.layout.dialog, null);  
 	        final EditText edtInput=(EditText)textEntryView.findViewById(R.id.edtInput);  
 	        settingDialog = new Dialog(context,R.style.trsdialog);
-//	        settingDialog = new AlertDialog.Builder(context);  
-//	        settingDialog.setCancelable(false);
 	        settingDialog.setContentView(textEntryView);
-//	        settingDialog.setView(textEntryView);  
+	        //该对话框设置文件进度和播放延时时间
 	        textEntryView.findViewById(R.id.sure).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -207,8 +205,10 @@ public class MainUi extends Activity implements IViewUpdate{
 	                    float startPos = ((float)mFileFactroy.getFileSize() * ((float)(delayTime %101/100.0f)));
 	                    if(DEBUG)LogHelper.LOGD(TAG, "startPos="+startPos + "mFileFactroy.getFileSize()=" + mFileFactroy.getFileSize());
 	                    try {
-	                    	//快进快退的时候要考虑当前位置..直接忽略掉当前这行..
-							initFileInfo(mFileFactroy.ignoreOneLine((int)startPos));
+	                    	if(startPos > 0)
+	                    		//快进快退的时候要考虑当前位置..直接忽略掉当前这行..文件开头就不用过滤了
+	                    		startPos = mFileFactroy.ignoreOneLine((int)startPos);
+	                    	initFileInfo((int)startPos);
 						} catch (IOException e) {
 							exitByException("seek file fail");
 							e.printStackTrace();
@@ -217,8 +217,6 @@ public class MainUi extends Activity implements IViewUpdate{
                     }
                     settingDialog.dismiss();
                     edtInput.setText("");
-                    /*if(menuDialog.isShowing())
-                    	menuDialog.dismiss();*/
 				}
 			} );
 	        
@@ -310,6 +308,7 @@ public class MainUi extends Activity implements IViewUpdate{
 		}
 		time = System.currentTimeMillis();
 		if(DEBUG) LogHelper.LOGD(TAG, "analyse startPos=" + startPos + "mFileFactroy.getFileSize()" + mFileFactroy.getFileSize());
+		
 		if(startPos >= mFileFactroy.getFileSize())
 			mFileFactroy.readLastPageData(startPos,mTheme.getRowSum(), mContentLayout.getAnalyseData(0), mTheme.getPaint());
 		else
@@ -482,7 +481,7 @@ public class MainUi extends Activity implements IViewUpdate{
 	}
 	
 	@Override
-	public void needUpdateData(PageDataInfo info,int offset,boolean isNext) {
+	public void needUpdateData(IPageDateInfo info,int offset,boolean isNext) {
 		try {
 			if(isNext){
 				mFileFactroy.readPageData(offset, mTheme.getRowSum(), info, mTheme.getPaint());

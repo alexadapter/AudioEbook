@@ -5,7 +5,36 @@ import java.util.ArrayList;
 public interface IViewInfo {
 //	public void needUpdateData(int pos,int offset);a
 	
-	public class PageDataInfo{
+	public interface IPageDateInfo{
+		public void setCurPagePos(int start,int end,int edge);
+		
+		public int getCurPageStartPos();
+		
+		public int getCurPageEndPos();
+		
+		/**
+		 * -1 到达文件开头处
+		 * 0  文件中间
+		 * 1  文件开头
+		 * 2  文件结束
+		 * 3  是开头又是结尾
+		 * */
+//		private int IsFileEdge();
+		
+		public boolean IsFileStart();
+		
+		public boolean IsFileEnd();
+		
+		public ArrayList<Integer> getRecordList();
+		
+		public String getDataStr();
+		
+		public void setDataStr(String dataString);
+		
+		public void clear();
+	}
+	
+	public class PageDataInfo implements IPageDateInfo{
 		private 	int 				fileStartPos;
 		private 	int 				fileEndPos;
 		private 	String 				data = "";
@@ -69,13 +98,10 @@ public interface IViewInfo {
 			record = null;
 			data = null;
 		}
-		
 	}
 	
 	public ArrayList<Integer> 	getViewRecord();
 	public String 				getViewDataStr();
-//	public int[] 				getFilePos();
-	public PageDataInfo 		getAnalyseData();
-//	public void 				setAnalyseData(AnalyseDataInfo data);
+	public IPageDateInfo 		getAnalyseData();
 }
 

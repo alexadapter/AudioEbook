@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.Color;
 
 import com.android.lee.utils.Utils;
 
@@ -19,7 +18,7 @@ public class ReadView extends AbstractReadView implements IViewInfo{
     
 //    private 	List<Integer> 	mDataRecord;
 //    private		String 			mDataString;	
-    private 	PageDataInfo mDataInfo;
+    private 	IPageDateInfo mDataInfo;
 	public ReadView(Context context, int id) {
 		super(context);
 		setId(id);
@@ -106,7 +105,7 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 	}*/
 
 	@Override
-	public PageDataInfo getAnalyseData() {
+	public IPageDateInfo getAnalyseData() {
 		return mDataInfo;
 	}
 	

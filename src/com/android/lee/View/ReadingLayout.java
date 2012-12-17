@@ -13,7 +13,7 @@ import com.android.lee.Activity.PageState;
 import com.android.lee.Activity.PageState.OnPageStateChanged;
 import com.android.lee.View.AbstractReadView.AnimationEndListener;
 import com.android.lee.View.DisplayThemeInfo.UpdateThemeListener;
-import com.android.lee.View.IViewInfo.PageDataInfo;
+import com.android.lee.View.IViewInfo.IPageDateInfo;
 import com.android.lee.utils.LogHelper;
 
 public class ReadingLayout extends ViewGroup implements OnPageStateChanged{
@@ -221,7 +221,7 @@ public class ReadingLayout extends ViewGroup implements OnPageStateChanged{
 		}
 	};
 
-	public PageDataInfo getDisplayData(){
+	public IPageDateInfo getDisplayData(){
 		return ((IViewInfo)getChildAt(0)).getAnalyseData();
 	}
 	
@@ -229,7 +229,7 @@ public class ReadingLayout extends ViewGroup implements OnPageStateChanged{
 		return ((ReadView)getChildAt(0)).getFirstLine();
 	}
 	
-	public PageDataInfo getAnalyseData(int id) {
+	public IPageDateInfo getAnalyseData(int id) {
 		return ((IViewInfo)getChildAt(id)).getAnalyseData();
 	}
 

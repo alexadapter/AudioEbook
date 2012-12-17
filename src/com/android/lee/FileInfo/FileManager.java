@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import android.graphics.Paint;
 
 import com.android.lee.View.DisplayThemeInfo;
-import com.android.lee.View.IViewInfo.PageDataInfo;
+import com.android.lee.View.IViewInfo.IPageDateInfo;
 import com.android.lee.utils.LogHelper;
 import com.android.lee.utils.Utils;
 
@@ -254,7 +254,7 @@ public class FileManager implements IDataFactory{
 	}
 	
 	//编码问题还没有处理,如果是非正常编码的情况
-	public boolean readPageData(int offset1,int rowCount,PageDataInfo analyseData,Paint paint)  throws IOException {
+	public boolean readPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException {
 		boolean ret = true;
 		int readSize = 0;
 		int start = offset1;
@@ -279,7 +279,7 @@ public class FileManager implements IDataFactory{
 		return offset;
 	}
 	
-	public boolean readLastPageData(int offset1,int rowCount,PageDataInfo analyseData,Paint paint)  throws IOException {
+	public boolean readLastPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException {
 		boolean ret = true;
 		int readSize = 0;
 		int end = offset1;
@@ -299,7 +299,7 @@ public class FileManager implements IDataFactory{
 		return ret;
 	}
 	
-	private int analyseData(PageDataInfo analyseData,int rowCount,Paint paint,int end,String data,boolean last) throws UnsupportedEncodingException{
+	private int analyseData(IPageDateInfo analyseData,int rowCount,Paint paint,int end,String data,boolean last) throws UnsupportedEncodingException{
 		analyseData.getRecordList().clear();
 		Utils.AnalyseString(analyseData.getRecordList(), data,  paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth(),rowCount);
 		//int min = rowCount < analyseData.getRecordList().size()-1 ? analyseData.getRecordList().size()-1 - rowCount : 0;
@@ -338,7 +338,7 @@ public class FileManager implements IDataFactory{
 		return ret;
 	}*/
 	
-	private int analyseData(PageDataInfo analyseData,int rowCount,Paint paint,int start,String data) throws UnsupportedEncodingException{
+	private int analyseData(IPageDateInfo analyseData,int rowCount,Paint paint,int start,String data) throws UnsupportedEncodingException{
 		analyseData.getRecordList().clear();
 		Utils.AnalyseString(analyseData.getRecordList(), data, data.length(), paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth(),rowCount);
 		
