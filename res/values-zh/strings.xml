@@ -6,4 +6,8 @@
     <string name="TBI_OpenFile">打开书籍</string>
     <string name="TBI_BookShelf">我的书柜</string>
     <string name="TBI_ImportFile">导入存储卡上的图书</string>
+    
+    
+    <string name="TBI_Del">删除</string>
+    <string name="TBI_DelFile">是否同时删除该文件</string>
 </resources>

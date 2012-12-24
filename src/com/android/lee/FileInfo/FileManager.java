@@ -254,91 +254,70 @@ public class FileManager implements IDataFactory{
 	}
 	
 	//编码问题还没有处理,如果是非正常编码的情况
-	public boolean readPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException {
+	public boolean readPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException, UnsupportedEncodingException {
 		boolean ret = true;
 		int readSize = 0;
 		int start = offset1;
-		offset = offset1;
-		
-		String data = "";
-		for(int i=0; i<rowCount; i++){
-			synchronized (readFileLock) {
-				readSize = readLine(mFileHandler,mBuffer,mBufferSize,offset);
-			}
-			data += new String(mBuffer,0,readSize,mFileType);
-			offset += readSize;
-		}
-		analyseData(analyseData,rowCount,paint,start,data);
-		return ret;
-	}
-	
-	public int ignoreOneLine(int offset){
-		synchronized (readFileLock) {
-			offset += readLine(mFileHandler,mBuffer,mBufferSize,offset);
-		}
-		return offset;
-	}
-	
-	public boolean readLastPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException {
-		boolean ret = true;
-		int readSize = 0;
 		int end = offset1;
 		offset = offset1;
 		
 		String data = "";
-		for(int i=0; i<rowCount; i++){
-			synchronized (readFileLock) {
-				readSize = readLastLine(mFileHandler,mBuffer,offset);
-			}
-			data = new String(mBuffer,0,readSize,mFileType) + data;
-			
-//			if(DEBUG) LogHelper.LOGW(TAG, "subdata=" + data + "readSize=" + readSize );
-			offset -= readSize;
-		}
-		analyseData(analyseData,rowCount,paint,end,data,true);
-		return ret;
-	}
-	
-	private int analyseData(IPageDateInfo analyseData,int rowCount,Paint paint,int end,String data,boolean last) throws UnsupportedEncodingException{
 		analyseData.getRecordList().clear();
-		Utils.AnalyseString(analyseData.getRecordList(), data,  paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth(),rowCount);
-		//int min = rowCount < analyseData.getRecordList().size()-1 ? analyseData.getRecordList().size()-1 - rowCount : 0;
-		while((rowCount+1) < analyseData.getRecordList().size()){
-			analyseData.getRecordList().remove(0);
-		}
 		
-		String subdata = data.substring(analyseData.getRecordList().get(0), analyseData.getRecordList().get(analyseData.getRecordList().size()-1));
-		analyseData.setDataStr(subdata);
-		int start = end - subdata.getBytes(mFileType).length ;
-		
-		analyseData.setCurPagePos(start, end,getFileEdgeValue(start,end));
-		return end;
-	}
-	
-	/*private boolean readSumPageData(int offset1,int rowCount,int pageCount,PageDataInfo[] analyseData,Paint paint)  throws IOException,IndexOutOfBoundsException {
-		boolean ret = true;
-		int readSize = 0;
-		int start = offset1;
-		offset = offset1;
-		String data = "";
-		for(int i=0; i<pageCount*rowCount; i++){
+		for(int i=0; i<rowCount; ){
 			synchronized (readFileLock) {
 				readSize = readLine(mFileHandler,mBuffer,mBufferSize,offset);
 			}
-			data += new String(mBuffer,0,readSize,mFileType);
+			if(readSize <= 0){
+				break;
+			}
+			String temp = new String(mBuffer,0,readSize,mFileType);
+			data += temp;
+			i += Utils.AnalyseOneLineString(analyseData.getRecordList(), temp, rowCount, paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth());
 			offset += readSize;
 		}
-		for(int i=0; i<pageCount; i++){
-			start = analyseData(analyseData[0],rowCount,paint,start,data);
-			
-			if(analyseData[0].getDataStr().length() > 0 && data.length() < analyseData[0].getDataStr().length())
-				data = data.substring(analyseData[0].getDataStr().length()+1, data.length());
+		if(DEBUG) LogHelper.LOGW(TAG, "rowCount=" + rowCount + "--max " + (analyseData.getRecordList().size()-1));
+		if(analyseData.getRecordList().size() > 0){
+			String subdata = data.substring(analyseData.getRecordList().get(0), analyseData.getRecordList().get(analyseData.getRecordList().size()-1));
+			analyseData.setDataStr(subdata);
+			end = subdata.getBytes(mFileType).length + start;
 		}
-		
+		analyseData.setCurPagePos(start, end,getFileEdgeValue(start,end),mFileLength);
+//		analyseData(analyseData,rowCount,paint,start,data);
 		return ret;
-	}*/
+	}
 	
-	private int analyseData(IPageDateInfo analyseData,int rowCount,Paint paint,int start,String data) throws UnsupportedEncodingException{
+	public boolean fillPageData(int offset1,int fillRow,IPageDateInfo analyseData,String data,Paint paint)  throws IOException, UnsupportedEncodingException {
+		boolean ret = true;
+		int readSize = 0;
+		int start = offset1;
+		int end = offset1;
+		offset = offset1;
+		
+		for(int i=0; i<fillRow; ){
+			synchronized (readFileLock) {
+				readSize = readLine(mFileHandler,mBuffer,mBufferSize,offset);
+			}
+			if(readSize <= 0){
+				break;
+			}
+			String temp = new String(mBuffer,0,readSize,mFileType);
+			data += temp;
+			i += Utils.AnalyseOneLineString(analyseData.getRecordList(), temp,fillRow, paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth());
+			offset += readSize;
+			if(DEBUG) LogHelper.LOGW(TAG, "fillRow=" + fillRow + "--temp " + temp);
+		}
+//		if(DEBUG) LogHelper.LOGW(TAG, "fillPageData fillRow=" + fillRow + "--max " + (analyseData.getRecordList().size()-1));
+		if(analyseData.getRecordList().size() > 0){
+			String subdata = data.substring(analyseData.getRecordList().get(0), analyseData.getRecordList().get(analyseData.getRecordList().size()-1));
+			analyseData.setDataStr(subdata);
+			end = subdata.getBytes(mFileType).length + start;
+		}
+		analyseData.setCurPagePos(0, end,getFileEdgeValue(0,end),mFileLength);
+		return ret;
+	}
+	
+	/*private int analyseData(IPageDateInfo analyseData,int rowCount,Paint paint,int start,String data) throws UnsupportedEncodingException{
 		analyseData.getRecordList().clear();
 		Utils.AnalyseString(analyseData.getRecordList(), data, data.length(), paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth(),rowCount);
 		
@@ -355,10 +334,74 @@ public class FileManager implements IDataFactory{
 		
 //		if(DEBUG) LogHelper.LOGW(TAG, "subdata=" + subdata + "subzie" + subdata.getBytes(mFileType).length +  "start= " + start + "--end=" + end);
 		return end;
+	}*/
+	
+	public int ignoreOneLine(int offset){
+		synchronized (readFileLock) {
+			offset += readLine(mFileHandler,mBuffer,mBufferSize,offset);
+		}
+		return offset;
+	}
+	
+	public boolean readLastPageData(int offset1,int rowCount,IPageDateInfo analyseData,Paint paint)  throws IOException {
+		boolean ret = true;
+		int readSize = 0;
+		int end = offset1;
+		offset = offset1;
+		
+		String data = "";
+		int i=0;;
+		for(; i<rowCount; i++){
+			synchronized (readFileLock) {
+				readSize = readLastLine(mFileHandler,mBuffer,offset);
+			}
+			if(readSize <= 0 || offset <= 0){
+				break;
+			}
+			data = new String(mBuffer,0,readSize,mFileType) + data;
+			offset -= readSize;
+		}
+		
+		if(DEBUG) LogHelper.LOGW(TAG, "readLastPageData offset1=" + offset1 );
+		analyseData(analyseData,rowCount,paint,end,data);
+		return ret;
+	}
+	
+	private void analyseData(IPageDateInfo analyseData,int rowCount,Paint paint,int end,String data) throws IOException{
+		analyseData.getRecordList().clear();
+		Utils.AnalyseString(analyseData.getRecordList(), data,  paint, DisplayThemeInfo.getDefaultTheme().getDisplayWidth(),rowCount);
+		//int min = rowCount < analyseData.getRecordList().size()-1 ? analyseData.getRecordList().size()-1 - rowCount : 0;
+		if(DEBUG) LogHelper.LOGW(TAG, "analyseData.getRecordList().size()=" + analyseData.getRecordList().size());
+		if(analyseData.getRecordList().size() >= rowCount+1){
+			while((rowCount+1) < analyseData.getRecordList().size()){
+				analyseData.getRecordList().remove(0);
+			}
+			//回读的时候不满一屏幕补齐
+			String subdata = data.substring(analyseData.getRecordList().get(0), analyseData.getRecordList().get(analyseData.getRecordList().size()-1));
+			analyseData.setDataStr(subdata);
+			int start = end - subdata.getBytes(mFileType).length ;
+			
+			analyseData.setCurPagePos(start, end,getFileEdgeValue(start,end),mFileLength);
+		}else{
+			/*int start = end;
+			if(analyseData.getRecordList().size() > 1){//忽略最后一行...最后一行有可能跟下面补齐的数据合并
+				analyseData.getRecordList().remove(analyseData.getRecordList().size()-1);
+				start = data.getBytes(mFileType).length ;
+				if(DEBUG) LogHelper.LOGW(TAG, "start 0=" + start);
+				data = data.substring(0,analyseData.getRecordList().get(analyseData.getRecordList().size()-1));
+				start = data.getBytes(mFileType).length - 1;
+				if(DEBUG) LogHelper.LOGW(TAG, "start 1=" + start);
+			}
+			if(DEBUG) LogHelper.LOGW(TAG, "data=" + rowCount +"data=" + data);
+			fillPageData(start,rowCount-analyseData.getRecordList().size() ,analyseData,data,paint);*/
+			//合并的显示总有点怪，直接重新读了...
+			readPageData(0, rowCount, analyseData, paint);
+		}
 	}
 	
 	/**
 	 * @author lee 加载runnable
+	 * 另外一种方式...直接读取全部行数..存储行数信息...
 	 * */
 	/*private class LodingRunnable implements Runnable {
 		int startPos = 0;

@@ -1,5 +1,6 @@
 package com.android.lee.View;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
@@ -8,12 +9,13 @@ import com.android.lee.utils.LogHelper;
 import com.android.lee.utils.Utils;
 import com.iflytek.tts.R;
 
-public class DisplayThemeInfo implements IDisplayTheme{
+public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener*/{
 	
 	private   	int				mTopPadding,mBottomPadding,mLeftPadding=10,mRightPadding=10;
 	//defy 尺寸
 	private   	int				mViewWidth = 480;
 	private   	int				mViewHeight = 854;
+	private   	int				mScreenHeight = 854;
 	private   	int  			mDisplayWidth = mViewWidth - mLeftPadding - mRightPadding;
 	//private		int				mDisplayHeight;
 		
@@ -24,12 +26,16 @@ public class DisplayThemeInfo implements IDisplayTheme{
 	//ReadView的通用信息
 	private    	int				mTextSize ;
   	private    	int				mTextHeight;
-  	private 	 Paint			mPaint;
+  	private 	Paint			mPaint;
+  	
+  	private    	int				mProgressTextSize = 20;
+  	private 	int				mProgressTextHeight = 30;
   	
   	private static	String			TAG = "ReadAbstractView";
     private static	boolean			DEBUG = true;
-     
+    
     private static DisplayThemeInfo themeInfo;
+    
 	public static DisplayThemeInfo getDefaultTheme(){
 		if(themeInfo == null){
 			themeInfo = new DisplayThemeInfo();
@@ -49,7 +55,8 @@ public class DisplayThemeInfo implements IDisplayTheme{
   	}
   	
   	public interface UpdateThemeListener{
-  		void updateTheme();
+  		void updateThemeBg();
+  		void updateSize();
   	}
   	
   	private UpdateThemeListener updateThemeListener;
@@ -61,9 +68,18 @@ public class DisplayThemeInfo implements IDisplayTheme{
 	public void setThemeId(int id) {
 		mThemeid = id;
 		if(updateThemeListener != null)
-			updateThemeListener.updateTheme();
+			updateThemeListener.updateThemeBg();
 	}
 
+	/**
+	 * 显示进度
+	 * */
+	public void drawProgress(Canvas canvas,String progress){
+		mPaint.setTextSize(mProgressTextSize);
+		canvas.drawText(progress, mLeftPadding, mViewHeight + mProgressTextSize/2+4, mPaint);
+		mPaint.setTextSize(mTextSize);
+	}
+	
 	@Override
 	public void setTextSize(int size) {
 		mTextSize = size;
@@ -79,6 +95,8 @@ public class DisplayThemeInfo implements IDisplayTheme{
 				
 		mBottomPadding = last / 2;
 		mTopPadding = last - mBottomPadding;
+		
+		mProgressTextSize = 16;
 	}
 	
 	public int 	getDisplayWidth(){
@@ -90,7 +108,7 @@ public class DisplayThemeInfo implements IDisplayTheme{
 	}
 	
 	public int 	getScreenHeight(){
-		return mViewHeight;
+		return mScreenHeight;
 	}
 	
 	public int getLeftPadding(){
@@ -113,8 +131,11 @@ public class DisplayThemeInfo implements IDisplayTheme{
 	 * first set 
 	 * */
 	public void	setScreenInfo(int width, int height){
-		mViewHeight = height;
+		mScreenHeight = height;
 		mViewWidth = width;
+		
+		//default TextSize set
+		mViewHeight = mScreenHeight - mProgressTextHeight;
 		
 		mDisplayWidth = mViewWidth - mLeftPadding - mRightPadding;
 		mRowCount = mViewHeight / mTextHeight ;
@@ -122,13 +143,8 @@ public class DisplayThemeInfo implements IDisplayTheme{
 		mBottomPadding = last / 2;
 		mTopPadding = last - mBottomPadding;
 		
-		//由于系统基于字体的底部来绘制文本，所有需要加上字体的高度。
-		//draw text
-		/*FontMetrics fm = mPaint.getFontMetrics();
-		Utils.StartDrawH = (int) (fm.descent - fm.ascent)+1; */
-				
-		/*mBottomPadding = last / 2;
-		mTopPadding = last - mBottomPadding;*/
+		if(updateThemeListener != null)
+			updateThemeListener.updateSize();
 	}
 	
 	public void setPadding(int left,int right){
@@ -161,5 +177,4 @@ public class DisplayThemeInfo implements IDisplayTheme{
 	public Paint getPaint() {
 		return mPaint;
 	}
-
 }
