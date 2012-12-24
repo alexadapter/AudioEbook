@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@id/menu_itemLayout"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:layout_width="match_parent" 
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:gravity="center_horizontal"
 	android:paddingBottom="5dip">
-	<ImageView android:id="@id/item_image"
-		android:layout_centerHorizontal="true" 
+	<ImageView 
+	    android:layout_marginTop="10dip"
+	    android:id="@id/item_image"
+	    android:scaleType="fitXY"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"></ImageView>
+		android:layout_height="0dip"
+		android:layout_weight="2"/>
 	<TextView
-	 	android:layout_below="@id/item_image" 
 		android:id="@id/item_text"
-		android:layout_centerHorizontal="true" 
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:text="选项"></TextView>
-</RelativeLayout>
+		android:gravity="center"
+		android:textColor="@android:color/black"
+		android:layout_height="0dip"
+		android:layout_weight="1"/>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.android.lee.View;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public interface IDisplayTheme{
@@ -31,4 +32,12 @@ public interface IDisplayTheme{
 	
 	public void 	setTextSize(int size);
 	public void 	setTextColor(int color);
+	
+	public void 	drawProgress(Canvas canvas,String progress);
+	
+	/*public void 	sendSizeChanged(int width,int height);
+	 
+	public 	interface 	OnThemeChangedListener{
+    	void onSizeChanged(int width,int height);
+    }*/
 }

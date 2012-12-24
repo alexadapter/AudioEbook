@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -18,7 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,7 +38,7 @@ import com.android.lee.utils.Utils;
 import com.android.lee.utils.LinuxCommand.LinuxFileCommand;
 import com.iflytek.tts.R;
 
-public class FileListView extends LinearLayout implements OnItemClickListener,OnPageStateChanged {
+public class FileListView extends LinearLayout implements OnItemClickListener,OnPageStateChanged,  OnItemLongClickListener {
 	private 	ListView 				listView;
 	private 	LinuxFileCommand  		linuxCommand;
 	private 	ArrayList<FileInfo>  	adapterList ;
@@ -155,6 +158,7 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
 	private void initView(){
 		listView = (ListView)findViewById(R.id.bl_list);
 		listView.setOnItemClickListener(this);
+		listView.setOnItemLongClickListener(this);
 	}
 	
 	private void setData(){
@@ -191,10 +195,70 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
 			}
 		}
 	}
+
+//	LDialog delItemDialog;
+	Dialog delItemDialog;
+	String 	delPath;
+	private void createDialog(String path){
+		delPath = path;
+		if(DEBUG)LogHelper.LOGD(TAG, "createDialog sure" + delPath);
+		if(delItemDialog == null){
+	        delItemDialog = new Dialog(getContext(),R.style.trsdialog);
+//	        View view = delItemDialog.addView(R.layout.menu_list_del_item);
+	        View view = View.inflate(getContext(), R.layout.menu_list_del_item, null);
+	        delItemDialog.setContentView(view);
+	        final CheckBox checkbox =(CheckBox)view.findViewById(R.id.checkBox);
+	        
+	        //该对话框设置文件进度和播放延时时间
+	        view.findViewById(R.id.sure).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(DEBUG)LogHelper.LOGD(TAG, "createDialog sure" + delPath);
+//					String filePath = adapterList.get(position).getAbsolutePath();
+					if(mNeedUpdate != null){
+						mNeedUpdate.delDatabaseItem(delPath);
+					}
+					
+					if(checkbox.isChecked()){
+						try {
+							if(DEBUG)LogHelper.LOGD(TAG, "createDialog sure delete file" + delPath);
+							linuxCommand.deleteFile(delPath);
+							/*if(new File(delPath).delete()){
+								if(DEBUG)LogHelper.LOGD(TAG, "createDialog sure delete file" );
+							}*/
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						checkbox.setChecked(false);
+					}
+					delItemDialog.dismiss();
+				}
+			});
+	        
+	        view.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(DEBUG)LogHelper.LOGD(TAG, "createDialog cancel");
+					delItemDialog.dismiss();
+				}
+			});
+		}
+		delItemDialog.show();
+	}
+	
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id) {
+		if(pageState.getState() == PageState.STATE_FL){
+			if(DEBUG)LogHelper.LOGD(TAG, "onItemLongClick  " + adapterList.get(position).getAbsolutePath());
+			createDialog(adapterList.get(position).getAbsolutePath());
+			return true;
+		}else{
+			return false;
+		}
+	}
 	
 	//用于保存进入阅读界面对应于这个界面的list位置
 	private int 	selectedPos = -1;
-	
 	public void updateLastReadingPos(int pos,String content){
 		if(adapterList.get(selectedPos).getLastReadingPos() != pos){
 			adapterList.get(selectedPos).setLastReadingPos(pos);
@@ -207,29 +271,6 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
 		}
 	}
 	
-	/*private void exitByException(String log){
-		Toast.makeText(getContext(), log, Toast.LENGTH_SHORT).show();
-//		getContext().finish();
-	}*/
-	
-	/*private void analyzeFileList(File file){
-		if(adapterList == null){
-			adapterList = new ArrayList<FileInfo>();
-		}else{
-			adapterList.clear();
-		}
-		
-		File[] fileArrFiles = file.listFiles();
-		if(fileArrFiles != null){
-			for(File tmp : fileArrFiles){
-				final FileInfo fileInfo = new FileInfo(tmp,mDateFormat);//tmp.getAbsolutePath(),tmp.getName(),Utils.GetFileIcon(tmp),tmp.length(),mDateFormat.format(new Date(tmp.lastModified())));
-				adapterList.add(fileInfo);
-			}
-		}
-		if(DEBUG)
-			LogHelper.LOGE(TAG, "listSize=" + adapterList.size());
-	}*/
-	
 	/**
 	 * 显示导入的书籍界面，默认第一个是打开书籍,外部提供更新，匹配数据库
 	 * */
@@ -241,7 +282,6 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
 		}
 		
 		adapterList.add(new FileInfo(getResources().getString(R.string.TBI_OpenFile),getResources().getString(R.string.TBI_ImportFile)));
-		
 		if(cursor != null && cursor.getCount() > 0){
 			cursor.moveToFirst();
 			do{
