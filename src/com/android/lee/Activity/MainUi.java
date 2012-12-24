@@ -1,5 +1,6 @@
 package com.android.lee.Activity;
 
+import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -11,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -42,6 +44,7 @@ import com.android.lee.View.IViewInfo.IPageDateInfo;
 import com.android.lee.View.ReadingLayout;
 import com.android.lee.utils.LDialog;
 import com.android.lee.utils.LogHelper;
+import com.android.lee.utils.Utils;
 import com.iflytek.tts.R;
 import com.iflytek.tts.TTSUtils;
 import com.iflytek.tts.TTSUtils.ITTSUTilsPlayState;
@@ -102,13 +105,66 @@ public class MainUi extends Activity implements IViewUpdate{
         registerReceiver(mIntentReceiver, filter);
 //        mCalendar = Calendar.getInstance(TimeZone.getDefault());
 //        changeStateToFL();
-//        mPageState.updateState(PageState.STATE_FL);
-        setImportDataToDisplay();
+        
+        if(!openwithIntent(getIntent())){//默认的
+        	mPageState.updateState(PageState.DEFAULT_STATE);
+        }
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
+		if(!openwithIntent(intent)){//默认的
+        }
 		super.onNewIntent(intent);
+	}
+	
+	private boolean openwithIntent(Intent intent){
+		boolean ret = false;
+		Uri uri=(Uri)intent.getData();
+		if(uri != null){
+			String path=uri.getPath();
+			LogHelper.LOGD(TAG, "path=" + path);
+			if(path != null){
+				File file = new File(path);
+				if(file != null && file.exists() ){
+					if(Utils.TXT == Utils.GetFileIcon(file)){
+						if(mDbAccess != null){
+							mDbAccess.openDB();
+							int lastReadPos = 0;
+							Cursor cursor = mDbAccess.rawQuery("select * from " + DBUtils.TABLE_URLS + " where " + DBUtils.COLUMN_PATH + "  like ?  ", new String[]{path});
+							if(cursor == null || cursor.getCount() == 0){//如果是没有的书，就添加
+								ContentValues contentValue = new ContentValues();
+					            contentValue.put(DBUtils.COLUMN_PATH, path);
+					            contentValue.put(DBUtils.COLUMN_BOOKID, 1);
+					            contentValue.put(DBUtils.COLUMN_DATE, mFileListView.getCurTime());
+								mDbAccess.insert(DBUtils.TABLE_URLS, null, contentValue);
+							}else{
+								try{//已经存在的书就直接打开，从之前的阅读位置
+									cursor.moveToFirst();
+									lastReadPos = cursor.getInt(cursor.getColumnIndexOrThrow(DBUtils.COLUMN_POS));
+								}catch (IllegalArgumentException e) {
+									LogHelper.LOGE(TAG, "sqlite date get error");
+								}
+							}
+							if(cursor != null && !cursor.isClosed()){
+								cursor.close();
+								cursor = null;
+							}
+							if(DEBUG)
+								LogHelper.LOGE(TAG, "importFile= send stateChanged");
+							setImportDataToDisplay();
+							openFileForReading(path,lastReadPos);
+//							changeStateToFL();
+							//这里的状态通知不一定能通知出去...
+							//mPageState.updateState(PageState.STATE_FL);
+//							setImportDataToDisplay();
+						}
+						ret = true;
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -132,16 +188,16 @@ public class MainUi extends Activity implements IViewUpdate{
     
 	OnPageStateChanged stateChanged = new OnPageStateChanged() {
 		@Override
-		public void stateChange(int state) {
+		public void stateChange(int state,boolean isChanged) {
 			if(DEBUG)	LogHelper.LOGW(TAG, "send to stateChanged ");
 			if(mFileListView!= null){
-				mFileListView.stateChange(state);
+				mFileListView.stateChange(state,isChanged);
 			}
 			if(mFileListLayout != null){
-				mFileListLayout.stateChange(state);
+				mFileListLayout.stateChange(state,isChanged);
 			}
 			if(mContentLayout != null){
-				mContentLayout.stateChange(state);
+				mContentLayout.stateChange(state,isChanged);
 			}
 		}
 	};
@@ -376,7 +432,7 @@ public class MainUi extends Activity implements IViewUpdate{
 		if(DEBUG){
 			LogHelper.LOGW(TAG, "onDestroy");
 		}
-		dismissMenuView();
+		
 		if(mDbAccess != null){
 			mDbAccess.closeDB();
 		}
@@ -529,7 +585,7 @@ public class MainUi extends Activity implements IViewUpdate{
 	@Override
 	public void importFile(String name) {
 		if(DEBUG)
-			LogHelper.LOGE(TAG, "importFile=");
+			LogHelper.LOGE(TAG, "importFile="+name);
 		
 		if(mDbAccess != null){
 			mDbAccess.openDB();
@@ -540,11 +596,15 @@ public class MainUi extends Activity implements IViewUpdate{
 	            contentValue.put(DBUtils.COLUMN_BOOKID, 1);
 	            contentValue.put(DBUtils.COLUMN_DATE, mFileListView.getCurTime());
 				mDbAccess.insert(DBUtils.TABLE_URLS, null, contentValue);
+			}else{
+				
 			}
 			if(cursor != null && !cursor.isClosed()){
 				cursor.close();
 				cursor = null;
 			}
+			if(DEBUG)
+				LogHelper.LOGE(TAG, "importFile= send stateChanged");
 //			changeStateToFL();
 			//这里的状态通知不一定能通知出去...
 			mPageState.updateState(PageState.STATE_FL);
@@ -552,21 +612,6 @@ public class MainUi extends Activity implements IViewUpdate{
 		}
 	}
 	
-	/*private void changeStateToFL(){
-		if(mDbAccess != null){
-			mDbAccess.openDB();
-		}
-		//这里的状态通知不一定能通知出去...
-		mPageState.updateState(PageState.STATE_FL);
-		Cursor cursor = mDbAccess.rawQuery("select * from " + DBUtils.TABLE_URLS + " where " + DBUtils.COLUMN_PATH + " != '' " , null);
-		if(DEBUG)LogHelper.LOGE(TAG, "cursor=" + cursor.getCount());
-//		mFileListView.updateList(cursor);
-		setImportDataToDisplay(cursor);
-		if(cursor != null && !cursor.isClosed())
-			cursor.close();
-		cursor = null;
-	}*/
-
 	@Override
 	public void selectFileForImport() {
 		mPageState.updateState(PageState.STATE_FM);

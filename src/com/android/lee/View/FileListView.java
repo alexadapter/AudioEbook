@@ -152,7 +152,7 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
 		initView();
 		setData();
 		
-		stateChange(PageState.DEFAULT_STATE);
+//		stateChange(PageState.DEFAULT_STATE);
 	}
 	
 	private void initView(){
@@ -425,16 +425,18 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
 	}
 
 	@Override
-	public void stateChange(int state) {
+	public void stateChange(int state,boolean isChanged) {
 		if(DEBUG)LogHelper.LOGD(TAG, "stateChange");
-		if(state == PageState.STATE_FL){
-			//view初始化的时候设置这里为null，因为那时候该view还在activity里面为null，所以改回调无法调用改view里面的函数
-			if(mNeedUpdate != null)
-				mNeedUpdate.setImportDataToDisplay();
-		}else if(state == PageState.STATE_FM){
-//			openNewDir(Utils.MAIN_PATH);
-			setFilePath();
-//			setFilePath(Utils.MAIN_PATH);
+		if(isChanged){
+			if(state == PageState.STATE_FL){
+				//view初始化的时候设置这里为null，因为那时候该view还在activity里面为null，所以改回调无法调用改view里面的函数
+				if(mNeedUpdate != null)
+					mNeedUpdate.setImportDataToDisplay();
+			}else if(state == PageState.STATE_FM){
+	//			openNewDir(Utils.MAIN_PATH);
+				setFilePath();
+	//			setFilePath(Utils.MAIN_PATH);
+			}
 		}
 	}
 }

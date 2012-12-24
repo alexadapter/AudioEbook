@@ -22,7 +22,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -30,7 +30,7 @@
                 <data android:host="*" />
                 <data android:mimeType="text/plain" />
                 <data android:mimeType="text/html" />
-                <data android:mimeType="application/xhtml+xml" />
+                <!-- <data android:mimeType="application/xhtml+xml" />
                 <data android:mimeType="image/*" />
                 <data android:mimeType="application/rar" />
                 <data android:mimeType="application/zip" />
@@ -44,9 +44,9 @@
                 <data android:mimeType="com.meizu.FileManager/file/.keb" />
                 <data android:mimeType="com.meizu.FileManager/file/.cbz" />
                 <data android:mimeType="com.meizu.FileManager/file/.cbr" />
-                <data android:mimeType="com.meizu.FileManager/file/.chm" />
+                <data android:mimeType="com.meizu.FileManager/file/.chm" /> -->
             </intent-filter> -->
-            <intent-filter>
+           <!--  <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -63,7 +63,7 @@
                 <data android:pathPattern=".*cbz" />
                 <data android:pathPattern=".*cbr" />
                 <data android:pathPattern=".*chm" />
-            </intent-filter>
+            </intent-filter> -->
             <!-- <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
