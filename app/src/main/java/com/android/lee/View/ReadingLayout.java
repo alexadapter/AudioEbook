@@ -278,11 +278,13 @@ public class ReadingLayout extends ViewGroup implements OnPageStateChanged{
 	}
 
 	@Override
-	public void stateChange(int state) {
-		if(state == PageState.STATE_FM || state == PageState.STATE_FL){
-			setVisibility(View.GONE);
-		}else if(state == PageState.STATE_RD){
-			setVisibility(View.VISIBLE);
+	public void stateChange(int state,boolean isChanged) {
+		if(isChanged){
+			if(state == PageState.STATE_FM || state == PageState.STATE_FL){
+				setVisibility(View.GONE);
+			}else if(state == PageState.STATE_RD){
+				setVisibility(View.VISIBLE);
+			}
 		}
 	}
 
