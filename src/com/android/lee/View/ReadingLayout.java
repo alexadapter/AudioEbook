@@ -180,7 +180,7 @@ public class ReadingLayout extends ViewGroup implements OnPageStateChanged{
 	}
 	
 	/**
-	 * 是否可以点击...主要是区分开是否在动画状态中..
+	 * 是否可以点击...主要是区分开是否在动画状态中....
 	 * */
 	public boolean canClickAble(){
 		synchronized (lock) {
@@ -195,17 +195,13 @@ public class ReadingLayout extends ViewGroup implements OnPageStateChanged{
 		boolean ret = false;
 		synchronized (lock) {
 			if(!getDisplayData().IsFileEnd()){
-				Log.e("toNext", "getAnalyseData(0).getCurPageStartPos()=" + getAnalyseData(0).getCurPageStartPos()+
-						"moveToNext>>>getAnalyseData(0).getCurPageEndPos()=" + getAnalyseData(0).getCurPageEndPos() + 
-						"getAnalyseData(1).getCurPageStartPos()=" + getAnalyseData(1).getCurPageStartPos()+
-						"moveToNext>>>getAnalyseData(1).getCurPageEndPos()=" + getAnalyseData(1).getCurPageEndPos() + 
-						"getAnalyseData(2).getCurPageStartPos()=" + getAnalyseData(2).getCurPageStartPos()+
-						"getAnalyseData(2).getCurPageStartPos()=" + getAnalyseData(2).getCurPageEndPos()
-						);
-				
-				if(getDisplayData().IsFileStart() && getAnalyseData(2).getCurPageEndPos() != getAnalyseData(1).getCurPageStartPos()){
-					mUpdateRequest.needUpdateData(getAnalyseData(2),getAnalyseData(1).getCurPageEndPos(),true);
+				//如果是搜索的可能出现第一屏数据跟第二屏数据有重复的地方，这时候要重新更新第二屏的数据
+				if(getDisplayData().IsFileStart() && getAnalyseData(2).getCurPageStartPos() != getDisplayData().getCurPageEndPos()){
+					mUpdateRequest.needUpdateData(getAnalyseData(2),getDisplayData().getCurPageEndPos(),true);
 				}
+				/*if(getDisplayData().IsFileStart() && getAnalyseData(2).getCurPageEndPos() != getAnalyseData(1).getCurPageStartPos()){
+					mUpdateRequest.needUpdateData(getAnalyseData(2),getAnalyseData(1).getCurPageEndPos(),true);
+				}*/
 				canClick = false;
 				((ReadView)getChildAt(2)).moveToLeft();
 				if(DEBUG)LogHelper.LOGD(TAG, "to Next");

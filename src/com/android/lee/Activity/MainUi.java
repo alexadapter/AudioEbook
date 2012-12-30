@@ -368,14 +368,17 @@ public class MainUi extends Activity implements IViewUpdate{
 		else
 			mFileFactroy.readPageData(startPos,mTheme.getRowSum(), mContentLayout.getAnalyseData(0), mTheme.getPaint());
 		
-		if(!mContentLayout.getAnalyseData(0).IsFileStart())
+		if(!mContentLayout.getAnalyseData(0).IsFileStart()){
+			if(DEBUG) LogHelper.LOGD(TAG, "not FileStart");
 			mFileFactroy.readLastPageData(mContentLayout.getAnalyseData(0).getCurPageStartPos(), 
 					mTheme.getRowSum(), mContentLayout.getAnalyseData(1), mTheme.getPaint());
+		}
 		
-		if(!mContentLayout.getAnalyseData(0).IsFileEnd())
+		if(!mContentLayout.getAnalyseData(0).IsFileEnd()){
+			if(DEBUG) LogHelper.LOGD(TAG, "not IsFileEnd" + mContentLayout.getAnalyseData(0).getCurPageEndPos());
 			mFileFactroy.readPageData(mContentLayout.getAnalyseData(0).getCurPageEndPos(), 
 					mTheme.getRowSum(), mContentLayout.getAnalyseData(2), mTheme.getPaint());
-		
+		}
 		//readline readbuff 慢2倍
 		if(DEBUG) LogHelper.LOGD(TAG, "analyse end time" + (System.currentTimeMillis() - time));
 	}
@@ -389,7 +392,7 @@ public class MainUi extends Activity implements IViewUpdate{
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();
-		if(DEBUG)LogHelper.LOGD(TAG, "ACTION_OUTSIDE="+action);
+		if(DEBUG)LogHelper.LOGD(TAG, "onTouchEvent="+action);
 		if(mPageState.getState() == PageState.STATE_RD){
 			switch(action){
 				case MotionEvent.ACTION_DOWN:
