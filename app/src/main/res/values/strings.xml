@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">FatReading</string>
+    <string name="common_dlg_text_toolbar_exit">back</string>
+    <string name="common_dlg_text_toolbar_menu">menu</string>
+    <string name="TBI_OpenFile">openFile</string>
+    <string name="TBI_BookShelf">wy BookList</string>
+    <string name="TBI_ImportFile">import book from sdcard</string>
+</resources>
