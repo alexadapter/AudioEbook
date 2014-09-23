@@ -6,12 +6,11 @@ public interface IViewInfo {
 //	public void needUpdateData(int pos,int offset);a
 	
 	public interface IPageDateInfo{
-		public void setCurPagePos(int start,int end,int edge,int fileLen);
+		public void setCurPagePos(int start,int end,int edge);
 		
 		public int getCurPageStartPos();
 		
 		public int getCurPageEndPos();
-		public float getCurProgress();
 		
 		/**
 		 * -1 到达文件开头处
@@ -43,20 +42,14 @@ public interface IViewInfo {
 		
 		//begin-1 mid0 end1,first and end 2
 		private 	int					atFileEdge;
-		private 	float				atFileProgress;
 		public  PageDataInfo(){
 			record = new ArrayList<Integer>();
 		}
 		
-		public void setCurPagePos(int start,int end,int edge,int fileLen){
+		public void setCurPagePos(int start,int end,int edge){
 			fileEndPos = end;
 			fileStartPos = start;
 			atFileEdge = edge;
-			atFileProgress = (float)((float)start / (float)fileLen);
-		}
-		
-		public float getCurProgress(){
-			return atFileProgress;
 		}
 		
 		public int getCurPageStartPos(){

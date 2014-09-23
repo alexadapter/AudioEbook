@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 
 import com.android.lee.utils.Utils;
@@ -15,8 +16,9 @@ public class ReadView extends AbstractReadView implements IViewInfo{
     private 	int				atFilePos = 0;
     private 	int				mRecordId;
     
-    private 	IPageDateInfo 	mDataInfo;
-//    private		Rect			mReadProgressRect;
+//    private 	List<Integer> 	mDataRecord;
+//    private		String 			mDataString;	
+    private 	IPageDateInfo mDataInfo;
 	public ReadView(Context context, int id) {
 		super(context);
 		setId(id);
@@ -33,27 +35,25 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 		if(!getViewDataStr().isEmpty()){
 			canvas.save();
 			canvas.translate(0, DisplayThemeInfo.getDefaultTheme().getTopPadding());
+//			int start = getViewRecord().size()-2;
+//			int end = start > mTheme.getRowSum() ? start-mTheme.getRowSum() : 0;
 			int edge = 0;
 			if(getViewRecord().size() > 0)
 				edge = getViewRecord().get(0);
 			/*if(DEBUG)
 				LogHelper.LOGD(TAG, "record.size()=" + getViewRecord().size() + "edge=" + edge);*/
 			for(int i = 0; i < getViewRecord().size()-1; i++){
+				/*if(DEBUG)
+					LogHelper.LOGD(TAG, "record.size()=" + getViewRecord().size() + "--edge=" + (getViewRecord().get(i)-edge)
+							+"getViewDataStr" + getViewDataStr().length() + "getViewRecord().get(i)=" + getViewRecord().get(i)
+							+"getViewRecord().get(i+1)" + (getViewRecord().get(i+1)-edge));*/
 				canvas.drawText(getViewDataStr(), getViewRecord().get(i)-edge, getViewRecord().get(i+1)-edge, DisplayThemeInfo.getDefaultTheme().getLeftPadding(),
 							Utils.StartDrawH + i * mTheme.getTextHeight(), mTheme.getPaint());
 			}
 //			canvas.drawText(getViewDataStr(), getViewRecord().get(i), getViewDataStr().length(), 0,Utils.StartDrawH + i * mTheme.getTextHeight(), mTheme.getPaint());
-			
-			drawProgress(canvas,String.valueOf(Math.round(mDataInfo.getCurProgress()*1000)/10.0) + "%");
-            drawTime(canvas);
-//			canvas.drawText(String.valueOf(mDataInfo.getCurProgress()),0,0,mTheme.getPaint());
 			canvas.restore();
 		}
 	}
-
-	/*public void updateReadingProgress(){
-		this.invalidate();
-	}*/
 	
 	public String getFirstLine(){
 		int edge = getViewRecord().get(0);
@@ -85,10 +85,24 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 		return (ArrayList<Integer>) mDataInfo.getRecordList();
 	}
 
+	/*@Override
+	public void setViewDataStr(String data) {
+//		return mDataInfo.data;
+		mDataInfo.data = data;
+	}*/
+
 	@Override
 	public String getViewDataStr() {
 		return mDataInfo.getDataStr();
 	}
+
+	/*@Override
+	public void setAnalyseData(AnalyseDataInfo data) {
+		// TODO Auto-generated method stub
+//		mDataInfo.data = data.dataString;
+		mDataInfo =  
+//		int filePos = data.filePos;
+	}*/
 
 	@Override
 	public IPageDateInfo getAnalyseData() {
@@ -99,7 +113,7 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 		mDataInfo.clear();
 	}*/
 	
-	/*public void saveState(SharedPreferences pre,int id){
+	public void saveState(SharedPreferences pre,int id){
 		pre.edit().putInt(id+"x1", mDataInfo.getCurPageStartPos())
 				   .putInt(id+"x2", mDataInfo.getCurPageEndPos())
 				   .putInt(id+"x3", atFilePos()).commit();
@@ -107,5 +121,5 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 	
 	public void restoreState(SharedPreferences pre,int id){
 		mDataInfo.setCurPagePos(pre.getInt(id+"x1", 0), pre.getInt(id+"x2", 0), pre.getInt(id+"x3", 0));
-	}*/
+	}
 }

@@ -116,11 +116,7 @@ ssize_t readlastline(int fd, void *vptr, size_t maxlen)
 			return(-1);		/* error, errno set by read() */
 		}
 	}
-<<<<<<< HEAD
 	ret = (maxlen- n - 1);
-=======
-	ret = (maxlen - n - 1);
->>>>>>> save convert project to android-studio, add some,remove build dir
 	return ret;
 }
 
@@ -133,11 +129,7 @@ ssize_t ReadLastline(int fd, char *ptr, size_t maxlen)
 		LOGE("Readline error < 0");
 		//return ret;
 	}
-<<<<<<< HEAD
 	memset(ptr,0,n+1);
-=======
-	memset(ptr,0,n);
->>>>>>> save convert project to android-studio, add some,remove build dir
 	memcpy(ptr,&read_buf[readMax-n],n);
 	ptr[n]='\0';
 	//LOGE(" n=%d,readMax=%d ReadLastptr=%s",n,readMax,(char*)ptr);

@@ -11,7 +11,7 @@ public class PageState {
 
 	public 		static final int DEFAULT_STATE = STATE_FL;
 	
-	private		 int	mState = -1;
+	private		 int	mState = STATE_FL;
 	
 	private		static Object lock = new Object();
 	
@@ -32,20 +32,16 @@ public class PageState {
 	public 	void updateState(int state){
 		synchronized (lock) {
 			if(mState != state){
-				mState = state;//自行判断是否一致
+				mState = state;
 				if(listener != null){
-					listener.stateChange(mState,true);
-				}
-			}else{
-				if(listener != null){
-					listener.stateChange(mState,false);
+					listener.stateChange(mState);
 				}
 			}
 		}
 	}
 	
 	public interface OnPageStateChanged{
-		void stateChange(int state,boolean isChanged);
+		void stateChange(int state);
 	}
 	
 	OnPageStateChanged listener;

@@ -42,7 +42,7 @@ public class FileListLayout extends FrameLayout implements OnClickListener,OnPag
 		title = (TextView)findViewById(R.id.title);
 		path = (TextView)findViewById(R.id.path);
 		//default state 为已加载文件列表
-//		stateChange(PageState.DEFAULT_STATE);
+		stateChange(PageState.DEFAULT_STATE);
 		
 		back.setOnClickListener(this);
 		menu.setOnClickListener(this);
@@ -72,22 +72,20 @@ public class FileListLayout extends FrameLayout implements OnClickListener,OnPag
 	}
 
 	@Override
-	public void stateChange(int state,boolean isChanged) {
+	public void stateChange(int state) {
 		if(DEBUG)LogHelper.LOGD(TAG, "stateChange");
-		if(isChanged){
-			if(state == PageState.STATE_FM){
-				setVisibility(View.VISIBLE);
-				path.setVisibility(View.VISIBLE);
-				title.setText(R.string.TBI_OpenFile);
-				path.setText(Utils.CurPath);
-	//			((FileListView)findViewById(R.id.bl_container)).setFilePath(Utils.CurPath);
-			}else if(state == PageState.STATE_FL){
-				setVisibility(View.VISIBLE);
-				path.setVisibility(View.GONE);
-				title.setText(R.string.TBI_BookShelf);
-			}else if(state == PageState.STATE_RD){
-				setVisibility(View.GONE);
-			}
+		if(state == PageState.STATE_FM){
+			setVisibility(View.VISIBLE);
+			path.setVisibility(View.VISIBLE);
+			title.setText(R.string.TBI_OpenFile);
+			path.setText(Utils.CurPath);
+//			((FileListView)findViewById(R.id.bl_container)).setFilePath(Utils.CurPath);
+		}else if(state == PageState.STATE_FL){
+			setVisibility(View.VISIBLE);
+			path.setVisibility(View.GONE);
+			title.setText(R.string.TBI_BookShelf);
+		}else if(state == PageState.STATE_RD){
+			setVisibility(View.GONE);
 		}
 	}
 }

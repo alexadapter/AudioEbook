@@ -1,6 +1,5 @@
 package com.android.lee.View;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
@@ -9,37 +8,28 @@ import com.android.lee.utils.LogHelper;
 import com.android.lee.utils.Utils;
 import com.iflytek.tts.R;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.SimpleTimeZone;
-
-public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener*/{
+public class DisplayThemeInfo implements IDisplayTheme{
 	
 	private   	int				mTopPadding,mBottomPadding,mLeftPadding=10,mRightPadding=10;
 	//defy 尺寸
 	private   	int				mViewWidth = 480;
 	private   	int				mViewHeight = 854;
-	private   	int				mScreenHeight = 854;
 	private   	int  			mDisplayWidth = mViewWidth - mLeftPadding - mRightPadding;
 	//private		int				mDisplayHeight;
 		
-	private		int				mThemeid = 3;
+	private		int				mThemeid = 0;
 	private  	int				mRowCount = 0;
 	
-	private 	int				mDefaultTextSize = 42;
+	private 	int				mDefaultTextSize = 30;
 	//ReadView的通用信息
 	private    	int				mTextSize ;
   	private    	int				mTextHeight;
-  	private 	Paint			mPaint;
-  	
-  	private    	int				mProgressTextSize = 32;
-  	private 	int				mProgressTextHeight = 42;
+  	private 	 Paint			mPaint;
   	
   	private static	String			TAG = "ReadAbstractView";
     private static	boolean			DEBUG = true;
-    
+     
     private static DisplayThemeInfo themeInfo;
-    
 	public static DisplayThemeInfo getDefaultTheme(){
 		if(themeInfo == null){
 			themeInfo = new DisplayThemeInfo();
@@ -59,8 +49,7 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
   	}
   	
   	public interface UpdateThemeListener{
-  		void updateThemeBg();
-  		void updateSize();
+  		void updateTheme();
   	}
   	
   	private UpdateThemeListener updateThemeListener;
@@ -72,29 +61,9 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	public void setThemeId(int id) {
 		mThemeid = id;
 		if(updateThemeListener != null)
-			updateThemeListener.updateThemeBg();
+			updateThemeListener.updateTheme();
 	}
 
-	/**
-	 * 显示进度
-	 * */
-	public void drawProgress(Canvas canvas,String progress){
-		mPaint.setTextSize(mProgressTextSize);
-		canvas.drawText(progress, mLeftPadding, mViewHeight + mProgressTextSize/2 - 6, mPaint);
-		mPaint.setTextSize(mTextSize);
-	}
-
-    public void drawTime(Canvas canvas){
-        mPaint.setTextSize(mProgressTextSize);
-        String time = DateFormat.getDateTimeInstance().format(new Date());
-        LogHelper.LOGD(TAG,"time=" + time);
-        int textWidth = (int)mPaint.measureText(time);
-        LogHelper.LOGD(TAG,"mViewWidth=" + mViewWidth + ",textWidth=" + textWidth);
-
-        canvas.drawText(time, mViewWidth - textWidth - mRightPadding, mViewHeight  + mProgressTextSize/2 - 6, mPaint);
-        mPaint.setTextSize(mTextSize);
-    }
-	
 	@Override
 	public void setTextSize(int size) {
 		mTextSize = size;
@@ -110,23 +79,9 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 				
 		mBottomPadding = last / 2;
 		mTopPadding = last - mBottomPadding;
-		
-//		mProgressTextSize = 16;
 	}
-
-    @Override
-    public void addTextSize() {
-        mTextSize = mTextSize + 2;
-        mPaint.setTextSize(mTextSize);
-    }
-
-    @Override
-    public void desTextSize() {
-        mTextSize = mTextSize > 2 ? mTextSize - 2 : mTextSize;
-        mPaint.setTextSize(mTextSize);
-    }
-
-    public int 	getDisplayWidth(){
+	
+	public int 	getDisplayWidth(){
 		return mDisplayWidth;
 	}
 	
@@ -135,7 +90,7 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	}
 	
 	public int 	getScreenHeight(){
-		return mScreenHeight;
+		return mViewHeight;
 	}
 	
 	public int getLeftPadding(){
@@ -158,11 +113,8 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	 * first set 
 	 * */
 	public void	setScreenInfo(int width, int height){
-		mScreenHeight = height;
+		mViewHeight = height;
 		mViewWidth = width;
-		
-		//default TextSize set
-		mViewHeight = mScreenHeight - mProgressTextHeight;
 		
 		mDisplayWidth = mViewWidth - mLeftPadding - mRightPadding;
 		mRowCount = mViewHeight / mTextHeight ;
@@ -170,8 +122,13 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 		mBottomPadding = last / 2;
 		mTopPadding = last - mBottomPadding;
 		
-		if(updateThemeListener != null)
-			updateThemeListener.updateSize();
+		//由于系统基于字体的底部来绘制文本，所有需要加上字体的高度。
+		//draw text
+		/*FontMetrics fm = mPaint.getFontMetrics();
+		Utils.StartDrawH = (int) (fm.descent - fm.ascent)+1; */
+				
+		/*mBottomPadding = last / 2;
+		mTopPadding = last - mBottomPadding;*/
 	}
 	
 	public void setPadding(int left,int right){
@@ -204,6 +161,5 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	public Paint getPaint() {
 		return mPaint;
 	}
-
 
 }

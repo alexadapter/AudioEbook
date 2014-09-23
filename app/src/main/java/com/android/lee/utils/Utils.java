@@ -179,7 +179,7 @@ public class Utils {
 		while(start < length && line < rowCount){
 			if(enterPos == -1 && needSearchEnter){
 				for(int i=start; i<content.length; i++){
-					if(content[i] == 0x0a){
+					if(content[i] == 0x0d){
 						enterPos = i;
 						break;
 					}
@@ -190,8 +190,9 @@ public class Utils {
 				}
 			}
 			if(tabPos == -1 && needSearchTab){
+//				tabPos = content.indexOf(0x0a, start);
 				for(int i=start; i<content.length; i++){
-					if(content[i] == 0x0d){
+					if(content[i] == 0x0a){
 						tabPos = i;
 						break;
 					}
@@ -200,6 +201,11 @@ public class Utils {
 					needSearchTab = false;
 				}
 			}
+			/*try {
+				int tt = content.getBytes("UTF-8").length;
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}*/
 			
 			breakPos = 0;//p.breakText(content, start, length, true, width, null);
 			record.add(start);
@@ -271,78 +277,34 @@ public class Utils {
 		return -1;
 	}
 	
-	public static int AnalyseOneLineString(List<Integer> record,String content,int rowCount,Paint p, int width){
-		int breakPos,start = 0,length = content.length(),line = 0; 
-		int lastPos = 0;
-		if(record.size() > 0){
-			lastPos = record.get(record.size() - 1);
-		}else{
-			record.add(lastPos);
-		}
-//		if(DEBUG)LogHelper.LOGD(TAG, "start=" + start + "length=" + length);
-		while(start < length){
-			breakPos = p.breakText(content, start, length, true, width, null);
-			start += breakPos;
-			record.add(lastPos + start);
-			line ++ ;
-			if((rowCount + 1) <= record.size()){
-				break;
-			}
-		}
-//		record.add(start);
-//		if(DEBUG)LogHelper.LOGD(TAG, "line=" + line);
-		return line;
-	}
-	
 	public static void AnalyseString(List<Integer> record,String content,Paint p, int width,int rowCount){
-		int enterPos=-1, breakPos,start = 0,length = content.length(); 
-//		int line = 0;
-		record.add(start);
-//		int lastStart = start;
-		while(start < length /*&& line < rowCount*/){
-			if(enterPos == -1){
-				enterPos = content.indexOf(0x0a, start);
-//				if(DEBUG)LogHelper.LOGD(TAG, "enterPos=" + enterPos + "start + breakPos=" + (start + breakPos));
-			}
-			breakPos = p.breakText(content, start, length, true, width, null);
-//			if(DEBUG)LogHelper.LOGD(TAG, "enterPos=" + enterPos + "start + breakPos=" + (start + breakPos));
-//			line++;
-//			lastStart = start;
-			if(enterPos >= 0 && (start + breakPos) > enterPos){
-				breakPos = -1;
-				start = enterPos+1;
-				enterPos = -1;
-			}else{
-				start += breakPos;
-			}
-//			if(DEBUG)LogHelper.LOGD(TAG, "content=" + content.substring(lastStart,start));
-			record.add(start);
-		}
-	}
-	
-	public static void AnalyseString(List<Integer> record,String content,int length, Paint p, int width,int rowCount){
-		int enterPos=-1,tabPos=-1, breakPos,start = 0; 
+		int enterPos=-1,tabPos=-1, breakPos,start = 0,length = content.length(); 
 		boolean needSearchEnter = true,needSearchTab = true;
 		int line = 0;
+//		int []lineInfo = new int[rowCount];
+
+//		if(DEBUG)
+//			LogHelper.LOGD(TAG, "content=" + content);
 		record.add(start);
-		while(start < length && line < rowCount){
-			if(enterPos == -1/* && needSearchEnter*/){
-				enterPos = content.indexOf(0x0a, start);
+		while(start < length /*&& line < rowCount*/){
+			if(enterPos == -1 && needSearchEnter){
+				enterPos = content.indexOf(0x0d, start);
 				if(enterPos < 0){
 					needSearchEnter = false;
 				}
 			}
-			/*if(tabPos == -1 && needSearchTab){
+			if(tabPos == -1 && needSearchTab){
 				tabPos = content.indexOf(0x0a, start);
 				if(tabPos < 0){//找不到之后就不查找了..
 					needSearchTab = false;
 				}
-			}*/
-			breakPos = p.breakText(content, start, length, true, width, null);
-			line++;
+			}
 //			if(DEBUG)
-//				LogHelper.LOGD(TAG, "breakPos="+breakPos + "enterPos=" + enterPos + "tabPos" + tabPos + "start=" + start);
-			/*if(needSearchEnter && needSearchTab){//\r\n
+//				LogHelper.LOGD(TAG, "enterPos=" + enterPos + "tabPos" + tabPos + "start=" + start + "length="+length);
+			breakPos = p.breakText(content, start, length, true, width, null);
+//			lineInfo[line] = length-start;
+			line++;
+			if(needSearchEnter && needSearchTab){//\r\n
 				if(enterPos < tabPos){
 					if(start+breakPos > enterPos){
 						if(enterPos + 1 == tabPos){
@@ -380,15 +342,76 @@ public class Utils {
 				}
 			}else{
 				start += breakPos;
-			}*/
-			if(DEBUG){
-				LogHelper.LOGD(TAG, "analy breakPos" + breakPos + "--enterPos--" + enterPos );
 			}
-			
-			if((start + breakPos) > enterPos){
-				breakPos = -1;
-				start = enterPos+1;
-				enterPos = -1;
+			record.add(start);
+//			record.add(length-start);
+		}
+		/*if(start >= length)//if read end to exit will add last line
+			record.add(length);*/
+		/*逆向取数据
+		 * while(record.size() > rowCount){
+			record.remove((Integer)0);
+		}*/
+	}
+	
+	public static void AnalyseString(List<Integer> record,String content,int length, Paint p, int width,int rowCount){
+		int enterPos=-1,tabPos=-1, breakPos,start = 0; 
+		boolean needSearchEnter = true,needSearchTab = true;
+		int line = 0;
+		record.add(start);
+		while(start < length && line < rowCount){
+			if(enterPos == -1 && needSearchEnter){
+				enterPos = content.indexOf(0x0d, start);
+				if(enterPos < 0){
+					needSearchEnter = false;
+				}
+			}
+			if(tabPos == -1 && needSearchTab){
+				tabPos = content.indexOf(0x0a, start);
+				if(tabPos < 0){//找不到之后就不查找了..
+					needSearchTab = false;
+				}
+			}
+			breakPos = p.breakText(content, start, length, true, width, null);
+			line++;
+//			if(DEBUG)
+//				LogHelper.LOGD(TAG, "breakPos="+breakPos + "enterPos=" + enterPos + "tabPos" + tabPos + "start=" + start);
+			if(needSearchEnter && needSearchTab){//\r\n
+				if(enterPos < tabPos){
+					if(start+breakPos > enterPos){
+						if(enterPos + 1 == tabPos){
+							start = enterPos + 2;
+							enterPos = -1;
+							tabPos = -1;
+						}else{
+							start = enterPos + 1;
+							enterPos = -1;
+						}
+					}else{
+						start += breakPos;
+					}
+				}else{
+					if(start+breakPos > tabPos){
+						start = tabPos + 1;
+						tabPos = -1;
+					}else{
+						start += breakPos;
+					}
+				}
+			}else if(needSearchEnter && !needSearchTab){
+				if(start+breakPos > enterPos){
+					start = enterPos + 1;
+					enterPos = -1;
+				}else{
+					start += breakPos;
+				}
+			}else if(!needSearchEnter && needSearchTab){
+				if(start+breakPos > tabPos){
+					start = tabPos + 1;
+					tabPos = -1;
+				}else{
+					start += breakPos;
+				}
 			}else{
 				start += breakPos;
 			}

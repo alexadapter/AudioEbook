@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-=======
-<?xml version="1.0" encoding="utf-8"?>
->>>>>>> save convert project to android-studio, add some,remove build dir
 <resources>
     <string name="app_name">FatReading</string>
     <string name="common_dlg_text_toolbar_exit">back</string>

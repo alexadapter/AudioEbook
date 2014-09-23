@@ -27,7 +27,5 @@ public interface IViewUpdate {
 	 * 给listview设置要显示的数据，并且更新到导入文件界面
 	 * */
 	void setImportDataToDisplay();
-	
-	void delDatabaseItem(String path);
 }
 
