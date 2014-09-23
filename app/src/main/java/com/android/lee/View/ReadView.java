@@ -45,6 +45,7 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 //			canvas.drawText(getViewDataStr(), getViewRecord().get(i), getViewDataStr().length(), 0,Utils.StartDrawH + i * mTheme.getTextHeight(), mTheme.getPaint());
 			
 			drawProgress(canvas,String.valueOf(Math.round(mDataInfo.getCurProgress()*1000)/10.0) + "%");
+            drawTime(canvas);
 //			canvas.drawText(String.valueOf(mDataInfo.getCurProgress()),0,0,mTheme.getPaint());
 			canvas.restore();
 		}

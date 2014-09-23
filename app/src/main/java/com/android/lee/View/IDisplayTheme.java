@@ -31,9 +31,13 @@ public interface IDisplayTheme{
 	public void 	setThemeId(int id);
 	
 	public void 	setTextSize(int size);
+	public void 	addTextSize();
+	public void 	desTextSize();
 	public void 	setTextColor(int color);
 	
 	public void 	drawProgress(Canvas canvas,String progress);
+
+    public void drawTime(Canvas canvas);
 	
 	/*public void 	sendSizeChanged(int width,int height);
 	 

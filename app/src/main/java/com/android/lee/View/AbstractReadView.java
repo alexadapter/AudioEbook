@@ -57,6 +57,10 @@ public abstract class AbstractReadView extends View /*implements IViewInfo*/{
 	protected void drawProgress(Canvas canvas,String progress){
 		mTheme.drawProgress(canvas, progress);
 	}
+
+    protected void drawTime(Canvas canvas){
+        mTheme.drawTime(canvas);
+    }
 	
 	public void moveToLeft() {
 		if(DEBUG)LogHelper.LOGD(TAG, "moveToLeft");

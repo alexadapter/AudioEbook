@@ -9,6 +9,10 @@ import com.android.lee.utils.LogHelper;
 import com.android.lee.utils.Utils;
 import com.iflytek.tts.R;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.SimpleTimeZone;
+
 public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener*/{
 	
 	private   	int				mTopPadding,mBottomPadding,mLeftPadding=10,mRightPadding=10;
@@ -19,17 +23,17 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	private   	int  			mDisplayWidth = mViewWidth - mLeftPadding - mRightPadding;
 	//private		int				mDisplayHeight;
 		
-	private		int				mThemeid = 0;
+	private		int				mThemeid = 3;
 	private  	int				mRowCount = 0;
 	
-	private 	int				mDefaultTextSize = 30;
+	private 	int				mDefaultTextSize = 42;
 	//ReadView的通用信息
 	private    	int				mTextSize ;
   	private    	int				mTextHeight;
   	private 	Paint			mPaint;
   	
-  	private    	int				mProgressTextSize = 20;
-  	private 	int				mProgressTextHeight = 30;
+  	private    	int				mProgressTextSize = 32;
+  	private 	int				mProgressTextHeight = 42;
   	
   	private static	String			TAG = "ReadAbstractView";
     private static	boolean			DEBUG = true;
@@ -76,9 +80,20 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	 * */
 	public void drawProgress(Canvas canvas,String progress){
 		mPaint.setTextSize(mProgressTextSize);
-		canvas.drawText(progress, mLeftPadding, mViewHeight + mProgressTextSize/2+4, mPaint);
+		canvas.drawText(progress, mLeftPadding, mViewHeight + mProgressTextSize/2 - 6, mPaint);
 		mPaint.setTextSize(mTextSize);
 	}
+
+    public void drawTime(Canvas canvas){
+        mPaint.setTextSize(mProgressTextSize);
+        String time = DateFormat.getDateTimeInstance().format(new Date());
+        LogHelper.LOGD(TAG,"time=" + time);
+        int textWidth = (int)mPaint.measureText(time);
+        LogHelper.LOGD(TAG,"mViewWidth=" + mViewWidth + ",textWidth=" + textWidth);
+
+        canvas.drawText(time, mViewWidth - textWidth - mRightPadding, mViewHeight  + mProgressTextSize/2 - 6, mPaint);
+        mPaint.setTextSize(mTextSize);
+    }
 	
 	@Override
 	public void setTextSize(int size) {
@@ -96,10 +111,22 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 		mBottomPadding = last / 2;
 		mTopPadding = last - mBottomPadding;
 		
-		mProgressTextSize = 16;
+//		mProgressTextSize = 16;
 	}
-	
-	public int 	getDisplayWidth(){
+
+    @Override
+    public void addTextSize() {
+        mTextSize = mTextSize + 2;
+        mPaint.setTextSize(mTextSize);
+    }
+
+    @Override
+    public void desTextSize() {
+        mTextSize = mTextSize > 2 ? mTextSize - 2 : mTextSize;
+        mPaint.setTextSize(mTextSize);
+    }
+
+    public int 	getDisplayWidth(){
 		return mDisplayWidth;
 	}
 	
@@ -177,4 +204,6 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 	public Paint getPaint() {
 		return mPaint;
 	}
+
+
 }

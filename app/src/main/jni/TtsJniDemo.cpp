@@ -190,6 +190,10 @@ static int registerNativeMethods(JNIEnv* env, const char* className,
 }
 
 #define JNIREG_CLASS "com/android/lee/FileInfo/FileManager"//指定要注册的类
+<<<<<<< HEAD
+=======
+
+>>>>>>> save convert project to android-studio, add some,remove build dir
 /**
  * Table of methods associated with a single class.
  */

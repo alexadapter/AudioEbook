@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.iflytek.tts">
+<<<<<<< HEAD:app/src/main/AndroidManifest.xml
 
+=======
+>>>>>>> save convert project to android-studio, add some,remove build dir:app/src/main/AndroidManifest.xml
       
       <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>  
       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
       <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -29,7 +33,7 @@
                 <data android:host="*" />
                 <data android:mimeType="text/plain" />
                 <data android:mimeType="text/html" />
-                <!-- <data android:mimeType="application/xhtml+xml" />
+                <data android:mimeType="application/xhtml+xml" />
                 <data android:mimeType="image/*" />
                 <data android:mimeType="application/rar" />
                 <data android:mimeType="application/zip" />
@@ -43,9 +47,9 @@
                 <data android:mimeType="com.meizu.FileManager/file/.keb" />
                 <data android:mimeType="com.meizu.FileManager/file/.cbz" />
                 <data android:mimeType="com.meizu.FileManager/file/.cbr" />
-                <data android:mimeType="com.meizu.FileManager/file/.chm" /> -->
-            </intent-filter> -->
-           <!--  <intent-filter>
+                <data android:mimeType="com.meizu.FileManager/file/.chm" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -62,8 +66,8 @@
                 <data android:pathPattern=".*cbz" />
                 <data android:pathPattern=".*cbr" />
                 <data android:pathPattern=".*chm" />
-            </intent-filter> -->
-            <!-- <intent-filter>
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -71,7 +75,7 @@
                 <data android:host="com.android.email.attachmentprovider" />
                 <data android:host="com.android.htmlfileprovider" />
                 <data android:mimeType="*/*" />
-            </intent-filter> -->
+            </intent-filter>
         </activity>
         
     </application>
