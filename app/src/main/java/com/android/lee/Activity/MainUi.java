@@ -67,7 +67,7 @@ public class MainUi extends Activity implements IViewUpdate{
 	private		FileListLayout  mFileListLayout;
 	private		FileListView  	mFileListView;
 	private 	PageState		mPageState;
-	private		int 			delayTime = 0;
+	private		float 			delayTime = 0;
 	private		LDialog 			settingDialog;
 
     private GestureDetector mGestureDetector;
@@ -178,7 +178,7 @@ public class MainUi extends Activity implements IViewUpdate{
             /*if(DEBUG)	LogHelper.LOGW(TAG, "mCalendar.getTime().getHours()=" +mCalendar.get(Calendar.HOUR_OF_DAY)
             		+":"+mCalendar.get(Calendar.MINUTE));*/
             if(delayTime-- > 0){
-            	if(delayTime == 0){
+            	if(delayTime <= 0){
             		synchronized (readLock) {
 	            		if(playing){
 		            		onClickStop();
@@ -279,7 +279,7 @@ public class MainUi extends Activity implements IViewUpdate{
 				public void onClick(View v) {
                     setTitle(edtInput.getText());  
                     if(edtInput.getText() != null)
-                    	delayTime = Integer.valueOf(edtInput.getText().toString());
+                    	delayTime = Float.valueOf(edtInput.getText().toString());
                     if(clickMenuId == MENU_ITEM_SEEK){
 	                    float startPos = ((float)mFileFactroy.getFileSize() * ((float)(delayTime %101/100.0f)));
 	                    if(DEBUG)LogHelper.LOGD(TAG, "startPos="+startPos + "mFileFactroy.getFileSize()=" + mFileFactroy.getFileSize());
@@ -421,23 +421,18 @@ public class MainUi extends Activity implements IViewUpdate{
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            int y = (int) e.getY();
+            /*int y = (int) e.getY();
             if(y < DisplayThemeInfo.getDefaultTheme().getScreenHeight() /3){
                 toPriPage();
             }else if(y > 2 * DisplayThemeInfo.getDefaultTheme().getScreenHeight() /3){
                 toNextPage();
-            } else{
-                /*if(menuDialog != null && !menuDialog.isShowing()) {
-                    menuDialog.show();
-                    return true;
-					}*/
-                /*if(menuView != null && menuView.getParent() != null){
-                    dismissMenuView();
-                }else {
-                    showMenuView();
-                }*/
-                return true;
-			}
+            }*/
+            int x = (int) e.getX();
+            if(x < DisplayThemeInfo.getDefaultTheme().getScreenWidth() /3){
+                toPriPage();
+            }else if(x > 2 * DisplayThemeInfo.getDefaultTheme().getScreenWidth() /3){
+                toNextPage();
+            }
 			return true;
         }
     };

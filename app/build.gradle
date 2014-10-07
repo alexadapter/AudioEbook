@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 16
+    compileSdkVersion 19
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         applicationId "com.iflytek.tts"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 19
 
         versionCode 2
@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:18.0.0'
+    compile 'com.android.support:support-v4:19.0.0'
     compile files('libs/antlr-2.7.4.jar')
     compile files('libs/chardet-1.0.jar')
     compile files('libs/cpdetector_1.0.10.jar')

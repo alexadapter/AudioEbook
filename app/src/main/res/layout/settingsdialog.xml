@@ -16,7 +16,7 @@
         android:layout_marginLeft="40dip"  
         android:layout_marginRight="40dip" 
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:numeric="integer" 
+        android:numeric="decimal"
         android:id="@+id/edtInput"/>  
     <Button
         android:layout_below="@+id/edtInput"  
