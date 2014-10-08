@@ -175,8 +175,7 @@ public class MainUi extends Activity implements IViewUpdate{
         @Override
         public void onReceive(Context context, Intent intent) {
 //            String action = intent.getAction();
-            /*if(DEBUG)	LogHelper.LOGW(TAG, "mCalendar.getTime().getHours()=" +mCalendar.get(Calendar.HOUR_OF_DAY)
-            		+":"+mCalendar.get(Calendar.MINUTE));*/
+            if(DEBUG)	LogHelper.LOGW(TAG, "mCalendar.getTime().getHours()=" );
             if(delayTime-- > 0){
             	if(delayTime <= 0){
             		synchronized (readLock) {
@@ -277,11 +276,12 @@ public class MainUi extends Activity implements IViewUpdate{
 	        textEntryView.findViewById(R.id.sure).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-                    setTitle(edtInput.getText());  
+                    setTitle(edtInput.getText());
+                    float var = 0;
                     if(edtInput.getText() != null)
-                    	delayTime = Float.valueOf(edtInput.getText().toString());
+                        var = Float.valueOf(edtInput.getText().toString());
                     if(clickMenuId == MENU_ITEM_SEEK){
-	                    float startPos = ((float)mFileFactroy.getFileSize() * ((float)(delayTime %101/100.0f)));
+	                    float startPos = ((float)mFileFactroy.getFileSize() * ((float)(var %101/100.0f)));
 	                    if(DEBUG)LogHelper.LOGD(TAG, "startPos="+startPos + "mFileFactroy.getFileSize()=" + mFileFactroy.getFileSize());
 	                    try {
 	                    	if(startPos > 0)
@@ -293,6 +293,8 @@ public class MainUi extends Activity implements IViewUpdate{
 							e.printStackTrace();
 						}
 	                    mContentLayout.invalidate();
+                    }else{
+                        delayTime = var;
                     }
                     settingDialog.dismiss();
                     edtInput.setText("");
@@ -386,7 +388,7 @@ public class MainUi extends Activity implements IViewUpdate{
 	
 	@Override
 	protected void onStop() {
-		onClickStop();
+//		onClickStop();
 		super.onStop();
 	}
 
@@ -528,16 +530,18 @@ public class MainUi extends Activity implements IViewUpdate{
 					wm.removeView(menuView);
 					return true;
 				}
-				if(mContentLayout != null){
-					String firstLine = mContentLayout.getFirstLine();
-					int pos = mContentLayout.getDisplayData().getCurPageStartPos();
-					//this data save
-					saveFileReadingPos( mFileFactroy.getFileName(),firstLine, pos);
+                onClickStop();
+                if(mContentLayout != null){
+                    String firstLine = mContentLayout.getFirstLine();
+                    int pos = mContentLayout.getDisplayData().getCurPageStartPos();
+                    //this data save
+                    saveFileReadingPos( mFileFactroy.getFileName(),firstLine, pos);
 //					mFileListView.updateLastReadingPos(pos,firstLine);
-					//不需要更新数据，只是界面更新
-					mPageState.updateState(PageState.STATE_FL);
-					return true;
-				}
+                    //不需要更新数据，只是界面更新
+                    mPageState.updateState(PageState.STATE_FL);
+                    return true;
+                }
+
 			}
 		}else if(keyCode == KeyEvent.KEYCODE_MENU){
 			if (mPageState.getState() == PageState.STATE_RD) {
@@ -712,8 +716,8 @@ public class MainUi extends Activity implements IViewUpdate{
 	private final int MENU_ITEM_TIME = 2;// 定时
 	private final int MENU_ITEM_SEEK = 3;// 跳转
 	private final int MENU_ITEM_BOOKMARK = 4;// 添加书签
-	private final int MENU_ITEM_NIGHT = 5;// 删除所有
-	private final int MENU_ITEM_DAY = 6;// 删除当前
+	private final int MENU_ITEM_NIGHT = 5;// 晚上
+	private final int MENU_ITEM_DAY = 6;// 白天
 	private final int MENU_ITEM_TEXT_ADD = 7;// 删除当前
 	private final int MENU_ITEM_TEXT_DES = 8;// 删除当前
 	private int		clickMenuId = -1;
@@ -853,10 +857,10 @@ public class MainUi extends Activity implements IViewUpdate{
 				case MENU_ITEM_BOOKMARK:
 					break;
                 case MENU_ITEM_NIGHT:
-                    mTheme.setThemeId(7);
+                    mTheme.setThemeId(IDisplayTheme.NIGHT_THEME);
                     break;
                 case MENU_ITEM_DAY:
-                    mTheme.setThemeId(2);
+                    mTheme.setThemeId(IDisplayTheme.DAY_THEME);
                     break;
                 case MENU_ITEM_TEXT_ADD:
                     mTheme.addTextSize();

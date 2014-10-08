@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.android.lee.utils.Utils;
 
@@ -26,8 +27,11 @@ public class ReadView extends AbstractReadView implements IViewInfo{
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		if(background != null)
-			background.draw(canvas);
+		/*if(background != null)
+			background.draw(canvas);*/
+//        canvas.drawRect(0,0,mTheme.getScreenWidth(), mTheme.getScreenHeight(),new Paint(color));
+        canvas.clipRect(0,0,mTheme.getScreenWidth(), mTheme.getScreenHeight());
+        canvas.drawColor(color);
 		/*if(mBitmap != null)
 			canvas.drawBitmap(mBitmap, 0, 0, null);*/
 		if(!getViewDataStr().isEmpty()){

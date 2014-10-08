@@ -4,6 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public interface IDisplayTheme{
+
+    public static final int NIGHT_THEME = 7;
+    public static final int DAY_THEME = 2;
 	/**
 	 * get word display width
 	 * */
@@ -38,6 +41,8 @@ public interface IDisplayTheme{
 	public void 	drawProgress(Canvas canvas,String progress);
 
     public void drawTime(Canvas canvas);
+
+//    public int getColor();
 	
 	/*public void 	sendSizeChanged(int width,int height);
 	 

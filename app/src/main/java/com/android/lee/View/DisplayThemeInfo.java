@@ -53,7 +53,8 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
-		mPaint.setColor(Color.BLACK);
+        setThemeId(DAY_THEME);
+//		mPaint.setColor(Color.BLACK);
   			
   		setTextSize(mDefaultTextSize);
   	}
@@ -94,8 +95,8 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
         canvas.drawText(time, mViewWidth - textWidth - mRightPadding, mViewHeight  + mProgressTextSize/2 - 6, mPaint);
         mPaint.setTextSize(mTextSize);
     }
-	
-	@Override
+
+    @Override
 	public void setTextSize(int size) {
 		mTextSize = size;
 		mPaint.setTextSize(mTextSize);
@@ -192,7 +193,7 @@ public  class DisplayThemeInfo implements IDisplayTheme/*,OnThemeChangedListener
 
 	@Override
 	public int getThemeId() {
-		return mThemeid + R.drawable.theme_1;
+		return mThemeid/* + R.drawable.theme_1*/;
 	}
 
 	@Override

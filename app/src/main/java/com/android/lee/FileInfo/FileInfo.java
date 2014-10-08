@@ -6,7 +6,7 @@ import java.util.Date;
 
 import com.android.lee.utils.Utils;
 
-public class FileInfo {
+public class FileInfo implements Comparable<FileInfo>{
 	/**
 	 * 文件类型 区分非书籍文件
 	 * */
@@ -117,7 +117,16 @@ public class FileInfo {
 	public void setSizeOrContent(String sizeorContent){
 		sizeAndContent = sizeorContent;
 	}
-	
+
+    @Override
+    public int compareTo(FileInfo another) {
+        if(another.getName() == null || this.getName() == null){
+            return 0;
+        }
+        int com = another.getName().toUpperCase().compareTo(this.getName().toUpperCase());
+        return com;
+    }
+
 //	long filesize=objFile.getLength(); 
 
 }

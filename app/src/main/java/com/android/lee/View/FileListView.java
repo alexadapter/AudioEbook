@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import android.app.Dialog;
@@ -333,10 +334,14 @@ public class FileListView extends LinearLayout implements OnItemClickListener,On
             File file = new File(dir);
             String[] str = file.list();
             for(int i=0; str != null && i<str.length; i++){
+                if(str[i].startsWith(".")){
+                    continue;
+                }
                 final File temp = new File(dir + "/" + str[i]);
                 final FileInfo fileInfo = new FileInfo(temp,mDateFormat);
                 adapterList.add(fileInfo);
             }
+            Collections.sort(adapterList, Collections.reverseOrder());
 			/*BufferedReader in = new BufferedReader(new InputStreamReader(linuxCommand.ls_hd(dir).getInputStream()));
 			String name = null;  
 			while ((name = in.readLine()) != null) {

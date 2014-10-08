@@ -16,4 +16,10 @@
     
     
     <color name="test">#80f8f8ee</color>
+    <color name="read_bg_day">#fff7f7ef</color>
+    <color name="read_bg_night">#ff101818</color>
+    <color name="read_textColor_day">#ff393c39</color>
+    <color name="read_textColor_night">#ff424542</color>
+
+
 </resources>

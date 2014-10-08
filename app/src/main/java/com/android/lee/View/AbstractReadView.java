@@ -8,16 +8,16 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 import com.android.lee.utils.LogHelper;
+import com.iflytek.tts.R;
 
 public abstract class AbstractReadView extends View /*implements IViewInfo*/{
-    private 	String			TAG = "ReadAbstractView";
+    private 	String			TAG = "AbstractReadView";
     private		boolean			DEBUG = false;
     
     //背景图片，应该scrollto无法滚动背景..所以定义变量绘制进去
-    protected	Drawable 		background;
-//    protected 	Bitmap			mBitmap;
-//    protected	Canvas 			mCanvas;
-    
+//    protected	Drawable 		background;
+    protected int color;
+
     private 	Scroller 		mScroller;
     private		boolean			mStartAnimation = false;
     private 	DecelerateInterpolator interpolator;
@@ -39,17 +39,30 @@ public abstract class AbstractReadView extends View /*implements IViewInfo*/{
 	}
 	
 	public void updateTheme(){
-		background = getResources().getDrawable(mTheme.getThemeId());
-		background.setCallback(null);
-		background.setBounds(0, 0, mTheme.getScreenWidth(), mTheme.getScreenHeight());
+//        color = mTheme.getColor();
+//		background = getResources().getDrawable(mTheme.getThemeId());
+//		background.setCallback(null);
+//		background.setBounds(0, 0, mTheme.getScreenWidth(), mTheme.getScreenHeight());
+        if(mTheme.getThemeId() == IDisplayTheme.NIGHT_THEME) {
+            color = getResources().getColor(R.color.read_bg_night);
+            mTheme.getPaint().setColor(getResources().getColor(R.color.read_textColor_night));
+        }else if(mTheme.getThemeId() == IDisplayTheme.DAY_THEME){
+            color = getResources().getColor(R.color.read_bg_day);
+            mTheme.getPaint().setColor(getResources().getColor(R.color.read_textColor_day));
+        }
+
 		if(DEBUG)
-			LogHelper.LOGD(TAG, "---------------setTheme---------");
+			LogHelper.LOGD(TAG, "---------------setTheme---------mTheme.getThemeId()=" + mTheme.getThemeId()
+             + ",color=" + color);
 	}
 	
 	public void updateSize(){
-//		background = getResources().getDrawable(mTheme.getThemeId());
-//		background.setCallback(null);
-		background.setBounds(0, 0, mTheme.getScreenWidth(), mTheme.getScreenHeight());
+//		background.setBounds(0, 0, mTheme.getScreenWidth(), mTheme.getScreenHeight());
+        if(mTheme.getThemeId() == IDisplayTheme.NIGHT_THEME) {
+            color = getResources().getColor(R.color.read_bg_night);
+        }else if(mTheme.getThemeId() == IDisplayTheme.DAY_THEME){
+            color = getResources().getColor(R.color.read_bg_day);
+        }
 		if(DEBUG)
 			LogHelper.LOGD(TAG, "---------------setTheme---------");
 	}

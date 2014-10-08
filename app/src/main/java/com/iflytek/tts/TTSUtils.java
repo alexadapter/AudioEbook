@@ -81,7 +81,7 @@ public final class TTSUtils {
 		try {
 			stopRead();
 			stop = false;
-			Log.e(TAG, sentence);
+//			Log.e(TAG, sentence);
 			Tts.startReadThread(sentence);
 			Thread ty = new Thread(new Runnable() {
 				public void run() {
